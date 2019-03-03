@@ -8,12 +8,6 @@
 const SHA1_BLOCK_SIZE = 64
 const SHA1_OUTPUT_SIZE = 20
 
-'Following constants are used to allocate BUFFER64 usages during calculation of
-'HMACs
-const BUFFER64_HMAC_SHA1_KEY = 1
-const BUFFER64_HMAC_I_PAD = 2
-const BUFFER64_HMAC_O_PAD = 3
-
 
 Sub BUFFER64_XOR_INTO(intSrcBuffer as Byte, intDstBuffer as Byte, byteWith as Byte)
     private i as Integer

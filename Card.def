@@ -8,15 +8,21 @@ const STORAGE_ITEMS=16
 
 
 
+#include AES.DEF
+#include EAX.DEF
 #include SHA.DEF
 
 #include BUFFERS.card.bas
 #include HMAC.card.bas
 #include HOTP.card.bas
+#include CRYPTO.card.bas
 #include STORAGE.card.bas
 
+#include SECMSG.card.bas
 
-Declare Command &H88 &H00 getTOTP(Data as String)
-Declare Command &H88 &H02 WriteData(Data as String, Disable LE)
-Declare Command &H88 &H04 ReadData(LC=0, Data as String)
-Declare Command &H88 &H06 Benchmark()
+#include FACTORY_RESET.card.bas
+
+Declare Key &H01(32)
+
+
+

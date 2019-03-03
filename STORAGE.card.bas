@@ -31,13 +31,18 @@ Eeprom E2PROM_METADATA(STORAGE_ITEMS) as E2PROM_TYPE_METADATA
 Eeprom E2PROM_DATA(STORAGE_ITEMS) as String*224
 
 
+sub ERASE_ENTRY(byref dest as String, length as Integer)
+    private i as byte
+    for i =1 to 4
+        dest = crypto_random_bytes(length)
+    next
+end sub 
+
 
 sub E2PROM_DELETE(id as Integer)
     if id > STORAGE_ITEMS or id < 1 then
         exit sub
     end if
-    E2PROM_METADATA(id).encrypted_key = ""
-    E2PROM_METADATA(id).entry_type = E2PROM_ENTRY_EMPTY
+    call ERASE_ENTRY(E2PROM_METADATA(id).encrypted_key, 48)
     E2PROM_METADATA(id).identifier = ""
-    
 end sub

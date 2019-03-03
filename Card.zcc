@@ -3,7 +3,7 @@ ConfigFile=Pro\ZC56_M.zcf
 
 [Card Reader]
 PhysicalReader=100
-VirtualReader=201
+VirtualReader=0
 
 [Compiler]
 ImageFile=false
@@ -18,6 +18,15 @@ CRC=0x00d8684b
 Hex=false
 Length=46
 Visible=false
+
+[EEPROM]
+Block0=B]|QsJb.ZWffI`=iLo#36(rsD96\5^C)?H,/O,T+?f,4q*Q@$;t6ek&quote;&gt;7${-&amp;aGTA[%%523
+Block1=&amp;&amp;}7nDF-x&amp;y^p4cy2UIF~:+Oh65|#&lt;*CGD#w7&quote;ebUMbj=?L#%p{GLwQb-)hQD
+Block2=(&quote;dvQxp@\`zNB3u}PIdgaiR(To.!;AdlWzo^HkHv-gxAHyJ|:j&gt;RMea*IGW
+CRC=0x82978fca
+Length=164
+MaskCRC=3731178979
+StartCRC=561087058
 
 [Files Window]
 Block0=&quote;=my,fAB7L,_jjgu_+=LR*|&quote;L9:PS4]U6Og+$)Bp2G97rgrVDtb#jo:C
@@ -39,7 +48,7 @@ Length=46
 
 [Window Options]
 IOToolTipEnabled=true
-ShowRegisters=Auto
+ShowRegisters=Show
 
 [Window State]
 Block0=&quote;juy(J&amp;&amp;NwRR4[xn!!!*UyXk0o_yT&quote;%@PM=I3ZM&lt;}m.j{H/f4(?BihNeI(E4Ir6|Ll_|
