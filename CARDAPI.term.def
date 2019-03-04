@@ -2,5 +2,4 @@ Declare Command &H88 &H00 API_CARD_STATUS(LC=0, Data as String)
 Declare Command &H88 &H02 API_GET_CHALLENGE(LC=0, Data as String)
 Declare Command &H88 &H04 API_SET_ANSWER(Data as String)
 
-Declare Command &H88 &H08 API_RANDOM32BYTES(LC=0, Data as String)
-Declare Command &H88 &H10 API_ENCRYPT_TEST(LC=0, Data as string)
+Declare Command &H88 &H06 API_AT(Data as string)

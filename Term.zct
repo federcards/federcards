@@ -16,7 +16,7 @@ SourceFile=Term.bas
 Bottom=635
 Left=478
 Right=1130
-ShowCmd=1
+ShowCmd=2
 Top=204
 
 [FreeMem Window]

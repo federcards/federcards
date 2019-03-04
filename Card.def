@@ -20,6 +20,7 @@ const STORAGE_ITEMS=16
 
 #include SECMSG.card.bas
 
+#include ATSHELL.card.bas
 #include FACTORY_RESET.card.bas
 
 Declare Key &H01(32)

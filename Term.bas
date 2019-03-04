@@ -92,8 +92,24 @@ Key(&H01) = Sha256Hash(challenge_secret)
 call ProEncryption(P1=AlgAes128, P2=&H01, Rnd, Rnd)
 call CheckSW1SW2()
 
-call API_ENCRYPT_TEST(buffer)
-print buffer
+
+if SECMSG_IN_FORCE() then
+    print "********** Secure Messaging Started. **********"
+else
+    print "!!!!!!!!!! Secure Messaging Failure. !!!!!!!!!!"
+    GOTO TERMINATE
+end if
+
+
+while 1
+    print "AT+";
+    Line Input buffer
+    buffer = "AT+" + buffer
+    call API_AT(buffer)
+    call CheckSW1SW2()
+    print buffer
+    print ""
+wend
 
 
 

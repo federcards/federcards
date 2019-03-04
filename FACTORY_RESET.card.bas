@@ -1,4 +1,5 @@
 sub FACTORY_RESET()
+    call E2PROM_RESET()
     call SECMSG_FACTORY_RESET()
 end sub
 

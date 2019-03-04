@@ -1,6 +1,15 @@
 #include SECMSG.common.bas
 
 
+function SECMSG_IN_FORCE() as Byte
+    ' if secmsg is already started
+    if ALGORITHM <> 0 or KEYNUMBER <> 0 then
+        SECMSG_IN_FORCE = 1
+    else
+        SECMSG_IN_FORCE = 0
+    end if
+end function
+
 function SECMSG_DECRYPT_CHALLENGE(sharedsecret as string*SECMSG_SHAREDSECRET_LENGTH, challenge as string) as string
     private k as string
     k = Sha256Hash(sharedsecret)

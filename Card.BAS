@@ -30,14 +30,10 @@ Command &H88 &H04 API_SET_ANSWER(Data as String)
     Data = chr$(result)
 End Command
 
-
-
-Command &H88 &H08 API_RANDOM32BYTES(LC=0, Data as String)
-    Data = crypto_random_bytes(32)
-End Command
-
-Command &H88 &H10 API_ENCRYPT_TEST(LC=0, Data as string)
-    private k as string = "012345678901234567890123456789ab"
-    'Data = crypto_encrypt(k, "this is a secret.")
-    Data = crypto_decrypt(k, crypto_encrypt(k, "this is a secret."))
+Command &H88 &H06 API_AT(Data as string)
+    if not SECMSG_IN_FORCE() then
+        Data = "+ERROR_CARD_NOT_UNLOCKED"
+        exit command
+    end if
+    Data = ATCOMMAND(Data)
 End Command

@@ -61,7 +61,7 @@ end function
 function SECMSG_GET_CHALLENGE() as String
     private challenge as String
     
-    if SECMSG_READY <> 0 or SECMSG_REMAINING_ATTEMPTS < 1 or SECMSG_IN_FORCE() then
+    if SECMSG_IN_FORCE() or SECMSG_READY <> 0 or SECMSG_REMAINING_ATTEMPTS < 1 then
         ' if secure messaging is ready or already started, or died, forbid further challenges
         SECMSG_GET_CHALLENGE = ""
         exit function

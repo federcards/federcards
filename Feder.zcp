@@ -3,7 +3,7 @@ IOToolTipEnabled=true
 ShowRegisters=Auto
 
 [ZCC]
-0=[ ]Card.zcc
+0=[x]Card.zcc
 
 [ZCT]
 0=[ ]Term.zct

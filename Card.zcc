@@ -3,7 +3,7 @@ ConfigFile=Pro\ZC56_M.zcf
 
 [Card Reader]
 PhysicalReader=100
-VirtualReader=0
+VirtualReader=201
 
 [Compiler]
 ImageFile=false
@@ -20,13 +20,15 @@ Length=46
 Visible=false
 
 [EEPROM]
-Block0=B]|QsJb.ZWffI`=iLo#36(rsD96\5^C)?H,/O,T+?f,4q*Q@$;t6ek&quote;&gt;7${-&amp;aGTA[%%523
-Block1=&amp;&amp;}7nDF-x&amp;y^p4cy2UIF~:+Oh65|#&lt;*CGD#w7&quote;ebUMbj=?L#%p{GLwQb-)hQD
-Block2=(&quote;dvQxp@\`zNB3u}PIdgaiR(To.!;AdlWzo^HkHv-gxAHyJ|:j&gt;RMea*IGW
-CRC=0x82978fca
-Length=164
-MaskCRC=3731178979
-StartCRC=561087058
+Block0=B]zLH@c`NH}.8:a@=}6&apos;:tck`s]Jwr3%fLy=hkgod|&quote;G,JgC&lt;(V_#s57iRZj2EGc/}.*8LU
+Block1=jZ!Sx&gt;qBD|?`fDr:42%,BB{ZRWVX&quote;L*|[[3}MpFhh8L.ek@hn73Y6dR@h.S{A8EkPv;dX@
+Block2=Aadu}eAc^e/7D9l&lt;?LBs=Ali,v3fbqEYM{#&apos;eZ&gt;anaibY`\&quote;&amp;,|$A)J6qRKQmV)30W)?@L|
+Block3=61gy4jED-x;[)R0x]Tw$bFIa$PWhKN&amp;7X}gj&gt;Uo:oM2pit[vA2vS^:jR&gt;o,6aHc-8aAh2~/
+Block4=,^.Oe\j^8
+CRC=0x1d6b6214
+Length=254
+MaskCRC=1922581884
+StartCRC=393111434
 
 [Files Window]
 Block0=&quote;=my,fAB7L,_jjgu_+=LR*|&quote;L9:PS4]U6Og+$)Bp2G97rgrVDtb#jo:C
