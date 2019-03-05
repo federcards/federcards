@@ -68,7 +68,7 @@ function crypto_encrypt(byref encrypt_key as string, byval message as string) as
 end function
 
 
-function crypto_decrypt(byref decrypt_key as string, message as string) as string
+function crypto_decrypt(byref decrypt_key as string, byval message as string) as string
     private iv as string
     private tag as string
     iv = Left$(message, CRYPTO_IV_LENGTH)

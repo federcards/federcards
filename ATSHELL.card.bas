@@ -68,15 +68,33 @@ end sub
 
 
 function ATCOMMAND(data as string) as string  
-    call ATCOMMAND_PARSE(data)
-    if ATCOMMAND_NAME = "" then
-        ATCOMMAND = "INVALID_COMMAND"
-        exit function
-    end if
-    
-    private i as byte
-    ATCOMMAND = ATCOMMAND_NAME + "="
-    for i=1 to ATCOMMAND_ARGSCOUNT
-        ATCOMMAND = ATCOMMAND + ATCOMMAND_ARGS(i) + "|"
-    next
+    call ATCOMMAND_PARSE(data)    
+    select case ATCOMMAND_NAME
+        case "ULCK": ' unlock
+            if E2PROM_UNLOCK(ATCOMMAND_ARGS(1)) then
+                ATCOMMAND = "OK"
+            else
+                ATCOMMAND = "UNLOCK_FAILURE"
+            end if
+        case "SLCK": ' check lock status
+            select case E2PROM_LOCKED()
+                case 0:
+                    ATCOMMAND = "UNLOCKED"
+                case &HFF:
+                    ATCOMMAND = "UNINITIALIZED"
+                case else:
+                    ATCOMMAND = "LOCKED"
+            end select
+        case "LOCK": ' lock
+            call E2PROM_LOCK()
+            ATCOMMAND = "OK"
+        case "CPWD": ' set password
+            if E2PROM_SET_PASSWORD(ATCOMMAND_ARGS(1)) then
+                ATCOMMAND = "OK"
+            else
+                ATCOMMAND = "SET_E2PROM_PASSWORD_FAILED"
+            end if
+        case else:
+            ATCOMMAND = "INVALID_COMMAND"
+    end select
 end function

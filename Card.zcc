@@ -1,6 +1,12 @@
 [BasicCard]
 ConfigFile=Pro\ZC56_M.zcf
 
+[Breakpoints]
+Breakpoint0=File(&quote;Y:/Feder/Card.bas&quote;,38)
+Breakpoint1=File(&quote;Y:/Feder/ATSHELL.card.bas&quote;,74)
+Breakpoint2=File(&quote;Y:/Feder/STORAGE.card.bas&quote;,124)
+Breakpoint3=File(&quote;Y:/Feder/STORAGE.card.bas&quote;,119)
+
 [Card Reader]
 PhysicalReader=100
 VirtualReader=201
@@ -20,15 +26,15 @@ Length=46
 Visible=false
 
 [EEPROM]
-Block0=B]zLH@c`NH}.8:a@=}6&apos;:tck`s]Jwr3%fLy=hkgod|&quote;G,JgC&lt;(V_#s57iRZj2EGc/}.*8LU
-Block1=jZ!Sx&gt;qBD|?`fDr:42%,BB{ZRWVX&quote;L*|[[3}MpFhh8L.ek@hn73Y6dR@h.S{A8EkPv;dX@
-Block2=Aadu}eAc^e/7D9l&lt;?LBs=Ali,v3fbqEYM{#&apos;eZ&gt;anaibY`\&quote;&amp;,|$A)J6qRKQmV)30W)?@L|
-Block3=61gy4jED-x;[)R0x]Tw$bFIa$PWhKN&amp;7X}gj&gt;Uo:oM2pit[vA2vS^:jR&gt;o,6aHc-8aAh2~/
-Block4=,^.Oe\j^8
-CRC=0x1d6b6214
-Length=254
-MaskCRC=1922581884
-StartCRC=393111434
+Block0=B]z3&gt;M(6}x#nM!hy_F&apos;&gt;GlwgY&amp;=J^}12usM^gHqC+5)!^#:&quote;W\a{N&lt;S=HYi&quote;qu#0X5KMTn3
+Block1=1Sh\;SNQ!U/]XON*]`$~ov1O2=MD..&lt;IsXHg](!&apos;if8Rl2@nV)i=n;&apos;)9\$zeq}}K!^k9/r
+Block2=%zPKLK}V&apos;{x5nwl~z&apos;;c0xPGN:PVM(NNz*WLvZR5ii_\@v:cxlKPEtDNd@Z|G)r^[*&amp;|q,4
+Block3=CvFyX&amp;LmRu8E/[+A@kcHnuf|YHLBGY9;}Cf3+lWaZye&apos;CgCkGI}b?&apos;2zLp|sboh&quote;lki$_1a
+Block4=,M}I0+d3^
+CRC=0x12d2cbf0
+Length=255
+MaskCRC=868668790
+StartCRC=2762591132
 
 [Files Window]
 Block0=&quote;=my,fAB7L,_jjgu_+=LR*|&quote;L9:PS4]U6Og+$)Bp2G97rgrVDtb#jo:C
@@ -53,12 +59,12 @@ IOToolTipEnabled=true
 ShowRegisters=Show
 
 [Window State]
-Block0=&quote;juy(J&amp;&amp;NwRR4[xn!!!*UyXk0o_yT&quote;%@PM=I3ZM&lt;}m.j{H/f4(?BihNeI(E4Ir6|Ll_|
+Block0=&quote;juy(J&amp;&amp;NwRR4[xn!!!*U}xv`t9ROap:mK$tJE7UDU^1[d6VJ,[*I\&lt;Ru(}=WpKpGOhZ
 Block1=&amp;$dnL+a(/&lt;!&lt;?h&amp;}m&quote;)/QX7SRQgL}&gt;cl35\PSRED`:St[7H1n|L9_F7xR0H-8OBc5x`c%)
 Block2=g|&amp;Js;+d~]TuSPafA^Z{ov=NT!#7*(H|Rk}gnJ~q7i7NF/&gt;qnm)Fe1*Up6]n]T`/(zU9=i
 Block3=1:QNQk)l8O*1(HIdrh6YSod^f&lt;1Yf]2:&gt;)Q:YcqbA%{vbta+`6l}aR3B0`V1Qh|PR/wu#Ou
 Block4=/qSK]OFAv-4l@x=X{n&lt;mb`NomviP&apos;h3T_b\nTb4eIgR2rH9[W7:PCS:]1^,?Swz}3_&apos;I|bw
-Block5=E5oPD3q%Myt,;y7=D_&lt;v@^sOwCJ!HX0Is},6u7w,L]=t&lt;4H#zBT.m-fVERC\\Si3Z$}vvz&apos;
+Block5=E5oPD3q%Myt,;y7=D_5}s%p:M&apos;RFnL#%Yjv#]e3}j&amp;znc{i%5#+Fc&apos;@$/W8;+(;[auDC;))
 Block6=-.T4^#69iR#eAy\L71.a2zh$C/mUbC&gt;;
-CRC=0x9381088c
+CRC=0x673dc51e
 Length=374

@@ -83,12 +83,21 @@ end function
 public E2PROM_MAIN_KEY_DECRYPTED as string
 
 
-function E2PROM_UNLOCKED() as byte
+function E2PROM_LOCKED() as byte
     if E2PROM_MAIN_KEY_DECRYPTED = "" then
-        E2PROM_UNLOCKED = 1
+        if E2PROM_MAIN_KEY = "" then
+            E2PROM_LOCKED = &HFF
+        else
+            E2PROM_LOCKED = 1
+        end if
     else
-        E2PROM_UNLOCKED = 0
+        E2PROM_LOCKED = 0
     end if
+end function
+
+
+function strcpy(byref src as string) as string
+    strcpy = Mid$(src, 1)
 end function
 
 
@@ -106,7 +115,7 @@ function E2PROM_UNLOCK(password as string) as byte
         exit function
     end if
     
-    temp_main_key = E2PROM_MAIN_KEY
+    temp_main_key = strcpy(E2PROM_MAIN_KEY)
     E2PROM_MAIN_KEY = crypto_random_bytes(64)
     
     derived_password = E2PROM_DERIVE_KEY_FROM_PASSWORD(password)
@@ -133,7 +142,7 @@ function E2PROM_SET_PASSWORD(password as string) as byte
     private main_key_decrypted as string
     private new_password_derived as string
     ' First, get the decrypted main key
-    if E2PROM_UNLOCKED() then
+    if not E2PROM_LOCKED() then
         ' ... when E2PROM is unlocked, read from RAM
         main_key_decrypted = E2PROM_MAIN_KEY_DECRYPTED
     else
