@@ -18,21 +18,18 @@ Option Explicit
 #include AES.DEF
 #include SHA.DEF
 
+#include STRING.card.bas
 #include BUFFERS.card.bas
 #include HMAC.card.bas
 #include HOTP.card.bas
 #include CRYPTO.card.bas
 #include SECMSG.term.bas
 
+
 Declare Key &H01(32)
 
 
-Function Str2Hex(ByVal strInput as String) as String
-    private i as Integer
-    for i = 1 to len(strInput)
-        Str2Hex = Str2Hex + Hex$(asc(strInput(i)))
-    next
-End Function
+
 
 
 BEGIN:
@@ -60,6 +57,7 @@ private password as string
 private challenge as string=""
 private challenge_secret as string
 private challenge_answer as string
+private default_password_tried as byte = 0
 
 while card_status(1) <> chr$(&HFF)
     if card_status(1) = chr$(&H00) then
@@ -73,9 +71,13 @@ while card_status(1) <> chr$(&HFF)
     print Str2Hex(challenge)
     print ""
     
-    
-    print "Input password, remaining times: " + chr$(asc(card_status(1)) + 48)
-    Line Input password
+    if not default_password_tried then
+        password = "FEDER CARD"
+        default_password_tried = 1
+    else
+        print "Input password, remaining times: " + chr$(asc(card_status(1)) + 48)
+        Line Input password
+    end if
     
     challenge_secret = SECMSG_DECRYPT_CHALLENGE(password, challenge)
     challenge_answer = SECMSG_GENERATE_ANSWER(password, challenge_secret)
@@ -99,6 +101,26 @@ else
     print "!!!!!!!!!! Secure Messaging Failure. !!!!!!!!!!"
     GOTO TERMINATE
 end if
+
+
+buffer = "AT+STATUS"
+call API_AT(buffer) : call CheckSW1SW2()
+if buffer = "UNINITIALIZED" then
+    buffer = "AT+SETPWD=TEST"
+    call API_AT(buffer) : call CheckSW1SW2()
+end if
+buffer = "AT+UNLOCK=TEST"
+call API_AT(buffer) : call CheckSW1SW2()
+
+buffer = "AT+STATUS"
+call API_AT(buffer) : call CheckSW1SW2()
+if buffer = "UNLOCKED" then
+    print "CARD UNLOCKED >>"
+    print ""
+else
+    goto TERMINATE
+end if
+   
 
 
 while 1

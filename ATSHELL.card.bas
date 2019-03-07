@@ -33,6 +33,19 @@ sub ATCOMMAND_PARSE(src as string)
     next
     ATCOMMAND_NAME = Left$(src, i-1)
     
+    if len(ATCOMMAND_NAME) > 16 then ' ATCOMMAND cannot be so long
+        ATCOMMAND_NAME = ""
+        exit sub
+    end if
+    
+    for i=1 to len(ATCOMMAND_NAME) ' ensures ATCOMMAND_NAME must be alphabetic
+        j = asc(ATCOMMAND_NAME(i))
+        if j < 65 or j > 122 then
+            ATCOMMAND_NAME = ""
+            exit sub
+        end if
+    next
+    
     private argstr as string
     argstr = Mid$(src, i+1)
     i = 1
@@ -68,15 +81,18 @@ end sub
 
 
 function ATCOMMAND(data as string) as string  
-    call ATCOMMAND_PARSE(data)    
+    private newid as byte
+
+    call ATCOMMAND_PARSE(data)
     select case ATCOMMAND_NAME
-        case "ULCK": ' unlock
+        case "UNLOCK": ' unlock, verify password
             if E2PROM_UNLOCK(ATCOMMAND_ARGS(1)) then
                 ATCOMMAND = "OK"
             else
-                ATCOMMAND = "UNLOCK_FAILURE"
+                ATCOMMAND = E2PROM_ERROR_TEXT '"UNLOCK_FAILURE"
             end if
-        case "SLCK": ' check lock status
+            
+        case "STATUS": ' check lock status
             select case E2PROM_LOCKED()
                 case 0:
                     ATCOMMAND = "UNLOCKED"
@@ -85,15 +101,51 @@ function ATCOMMAND(data as string) as string
                 case else:
                     ATCOMMAND = "LOCKED"
             end select
+            
         case "LOCK": ' lock
             call E2PROM_LOCK()
             ATCOMMAND = "OK"
-        case "CPWD": ' set password
+            
+        case "SETPWD": ' set password
             if E2PROM_SET_PASSWORD(ATCOMMAND_ARGS(1)) then
                 ATCOMMAND = "OK"
             else
-                ATCOMMAND = "SET_E2PROM_PASSWORD_FAILED"
+                ATCOMMAND = E2PROM_ERROR_TEXT '"SET_E2PROM_PASSWORD_FAILED"
             end if
+            
+        case "COUNT": ' count all entries
+            ATCOMMAND = "+COUNT:" + dec2str(E2PROM_COUNT())
+            
+        case "GETMETA": ' read metadata of a record
+            if ATCOMMAND_ARGS(1) = "?" or ATCOMMAND_ARGS(1) = "" then
+                ATCOMMAND = "+CPBR:" + dec2str(E2PROM_ENTRY_SIZE_LIMIT) + ","
+                ATCOMMAND = ATCOMMAND + dec2str(E2PROM_METADATA_IDENTIFIER_SIZE_LIMIT)
+            else
+                private ret as string
+                ret = E2PROM_GETMETA(str2dec(ATCOMMAND_ARGS(1)) and &HFF)                
+                if ret = "" then
+                    ATCOMMAND = E2PROM_ERROR_TEXT
+                else
+                    ATCOMMAND = "+CPBR:" + ret
+                end if
+            end if
+            
+        case "ADDPWDENTRY":
+            newid = E2PROM_ADD_ENTRY(E2PROM_ENTRY_PASSWORD)
+            if newid = 0 then
+                ATCOMMAND = E2PROM_ERROR_TEXT
+            else
+                ATCOMMAND = "+ADDPWDENTRY:" + dec2str(newid)
+            end if
+            
+        case "ADDHOTPENTRY":
+            newid = E2PROM_ADD_ENTRY(E2PROM_ENTRY_HOTP)
+            if newid = 0 then
+                ATCOMMAND = E2PROM_ERROR_TEXT
+            else
+                ATCOMMAND = "+ADDHOTPENTRY:" + dec2str(newid)
+            end if
+            
         case else:
             ATCOMMAND = "INVALID_COMMAND"
     end select

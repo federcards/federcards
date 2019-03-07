@@ -12,6 +12,7 @@ const STORAGE_ITEMS=16
 #include EAX.DEF
 #include SHA.DEF
 
+#include STRING.card.bas
 #include BUFFERS.card.bas
 #include HMAC.card.bas
 #include HOTP.card.bas
