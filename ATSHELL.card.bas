@@ -13,19 +13,22 @@ sub ATCOMMAND_PARSE(src as string)
     ' Parse incoming ATCommand and put parsed result to public variables
     '  AT+CMDNAME=arg1,arg2,arg3,arg4,arg5
     '  AT+CMDNAME
+    private i as integer
+    private j as integer
+    private k as integer
+    
     ATCOMMAND_NAME = ""
     ATCOMMAND_ARGSCOUNT = 0
+    for i=1 to ATCOMMAND_ARGS_MAXCOUNT
+        ATCOMMAND_ARGS(i) = ""
+    next
     
     if Left$(src, 3) <> "AT+" then
         exit sub
     end if
     src = Mid$(src, 4)
     
-    
-    private i as integer
-    private j as integer
-    private k as integer
-    
+
     for i=1 to len(src)
         if src(i) = "=" then
             exit for
@@ -82,6 +85,7 @@ end sub
 
 function ATCOMMAND(data as string) as string  
     private newid as byte
+    private retstr as string
 
     call ATCOMMAND_PARSE(data)
     select case ATCOMMAND_NAME
@@ -116,18 +120,34 @@ function ATCOMMAND(data as string) as string
         case "COUNT": ' count all entries
             ATCOMMAND = "+COUNT:" + dec2str(E2PROM_COUNT())
             
-        case "GETMETA": ' read metadata of a record
-            if ATCOMMAND_ARGS(1) = "?" or ATCOMMAND_ARGS(1) = "" then
-                ATCOMMAND = "+CPBR:" + dec2str(E2PROM_ENTRY_SIZE_LIMIT) + ","
-                ATCOMMAND = ATCOMMAND + dec2str(E2PROM_METADATA_IDENTIFIER_SIZE_LIMIT)
+        case "NEXTMETA": ' read metadata of a record
+            retstr = E2PROM_NEXTMETA()                
+            if retstr = "" then
+                ATCOMMAND = E2PROM_ERROR_TEXT
             else
-                private ret as string
-                ret = E2PROM_GETMETA(str2dec(ATCOMMAND_ARGS(1)) and &HFF)                
-                if ret = "" then
-                    ATCOMMAND = E2PROM_ERROR_TEXT
-                else
-                    ATCOMMAND = "+CPBR:" + ret
-                end if
+                ATCOMMAND = "+NEXTMETA:" + retstr
+            end if
+            
+        case "SETMETA":
+            if E2PROM_SET_IDENTIFIER(str2dec(ATCOMMAND_ARGS(1)), ATCOMMAND_ARGS(2)) then
+                ATCOMMAND = "OK"
+            else
+                ATCOMMAND = E2PROM_ERROR_TEXT
+            end if
+            
+        case "GETDATA": ' read entry data
+            retstr = E2PROM_GETDATA(str2dec(ATCOMMAND_ARGS(1)), ATCOMMAND_ARGS(2), ATCOMMAND_ARGS(3))
+            if retstr = "" then
+                ATCOMMAND = E2PROM_ERROR_TEXT
+            else
+                ATCOMMAND = "+GETDATA:" + retstr
+            end if
+            
+        case "SETDATA": 'set entry data
+            if E2PROM_SETDATA(str2dec(ATCOMMAND_ARGS(1)), ATCOMMAND_ARGS(2)) then
+                ATCOMMAND = "OK"
+            else
+                ATCOMMAND = E2PROM_ERROR_TEXT
             end if
             
         case "ADDPWDENTRY":

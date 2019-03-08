@@ -1,6 +1,11 @@
 const HEX_ALPHABET = "0123456789ABCDEF"
 
-function dec2str(dec as integer) as string
+function strcpy(byref src as string) as string
+    strcpy = Mid$(src, 1)
+end function
+
+
+function dec2str(byval dec as integer) as string
     private x as byte
     do
         x = dec mod 10
@@ -38,11 +43,11 @@ function _char2hex(byval c as string*1) as integer
     private x as byte
     x = asc(c)
     if x >= 48 and x <= 57 then
-        _char2hex = x - 48
+        _char2hex = x - 48      ' 0 - 9
     else if x >= 65 and x <= 70 then
-        _char2hex = x - 65
+        _char2hex = x - 65 + 10 ' A B C D E F
     else if x >= 97 and x <= 102 then
-        _char2hex = x - 97
+        _char2hex = x - 97 + 10 ' a b c d e f
     else
         _char2hex = -1
     end if    

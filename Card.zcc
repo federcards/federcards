@@ -1,6 +1,9 @@
 [BasicCard]
 ConfigFile=Pro\ZC56_M.zcf
 
+[Breakpoints]
+Breakpoint0=File(&quote;Y:/Feder/ATSHELL.card.bas&quote;,135)
+
 [Card Reader]
 PhysicalReader=100
 VirtualReader=201
@@ -13,23 +16,23 @@ MapFile=false
 SourceFile=Card.bas
 
 [Counters Window]
-Block0=&quote;=my,fAB7L,_jjgu_+=LR*{PO$PPmo&amp;#W}uy;]^]g+d&amp;YrQr|zIm%r.7
-CRC=0x00d8684b
+Block0=&quote;=my,fAB7L,_ju0=DMS&quote;,&apos;l./RF,rLk@(ZJ._9*O*)=U\EGZ&quote;GzXxd&apos;I
+CRC=0x7b954c79
 Hex=false
 Length=46
 Visible=false
 
 [EEPROM]
-Block0=B]z3S8YR,U&quote;R^4bN`xOc.ph79d&amp;i1Od={4@hdgl@t&lt;/G_g&gt;!cOf)hSpSx|ef${,dx;ES/7i
-Block1=&lt;zD@ed#Wh6r&lt;.@a8gj,~?$v&quote;uOr4n&amp;_D-$cZDe3MJT1=Vd`Y&gt;DjfWue&amp;i,b(bR8DJc$+&gt;b)
-Block2=%tCt76]_2qMnN].|Ok@}&quote;$L&quote;gNbBx.j3C/G-3)*l}5-B/GozV3&quote;t\U}Cy*/gxfEOv&amp;LKU);
-Block3=.RXZs8EdA9Ka~8}r!^zui@Yx0}b}*FS=mxkQ10pJt6#ZCAB2$mf$n#q(CeNC&lt;18&quote;68&gt;p~pZ
-Block4=DS2k-@T5Zj|Q7Q/]/pe#gO8tWp6&gt;ynBSz3v8~Tj^BHOv3!5e.&quote;!&gt;Fqr7@#=Tt`WV\Gu}W7U
-Block5=#XV[R=E&lt;v
-CRC=0x7d36206a
-Length=338
-MaskCRC=370220099
-StartCRC=812485137
+Block0=B^#g^&gt;%uJIG}V&quote;W-{@De&quote;QCXb,kUajj7AplKdie9+~*$cniPXzZPWyP~&gt;ghl&lt;yDk)(Df{t&quote;
+Block1=A;ZcKI5ev}UC\H&gt;g2HaB&quote;t($zAm`x(vrcFc?~z]r28G`^TJbsym^BH,KD`b|Uy-$/6*bhMN
+Block2=;|PM:g~4r};={5hs@`aH^XOAD4n`s^n9%sS,7&amp;e&quote;YqqL]~&quote;B$q2Hjj~&gt;.t&lt;l(ICE$Ik\f`[
+Block3=8%]~fOaOYOy,Tt`\$Mk%S?[?_cF0kp-WyexK6B4E+lIeuV#eyg$yly&apos;m~,pk;zz&gt;Sm9Ql]Y
+Block4=0Xj/O*Hu2~}KmU%&quote;;?&amp;FK0^-e^k}AHv\+ra0tul9)A!+qr&apos;:ntQtOGvec%G.ohujU3jVTR/
+Block5=#YSGyp(yh
+CRC=0x4088175d
+Length=335
+MaskCRC=2749213490
+StartCRC=4235069262
 
 [Files Window]
 Block0=&quote;=my,fAB7L,_jjgu_+=LR*|&quote;L9:PS4]U6Og+$)Bp2G97rgrVDtb#jo:C
