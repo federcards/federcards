@@ -85,7 +85,9 @@ end sub
 
 function E2PROM_DERIVE_KEY_FROM_PASSWORD(password as string) as string
     ' Derive the key used for encrypting the main key, from user input
-    E2PROM_DERIVE_KEY_FROM_PASSWORD = Sha256Hash(HMAC_SHA1("TODO: SET A SALT PER CARD", password))
+    ' Note this depends on the secure_messaging shared secret. If that's 
+    ' changed, all data is lost! 
+    E2PROM_DERIVE_KEY_FROM_PASSWORD = Sha256Hash(HMAC_SHA1(SECMSG_SHAREDSECRET, password))
 end function
 
 function E2PROM_DERIVE_SUBKEY(id as byte) as string

@@ -22,7 +22,7 @@ Eeprom SECMSG_SHAREDSECRET as string*SECMSG_SHAREDSECRET_LENGTH
 Eeprom SECMSG_REMAINING_ATTEMPTS as Byte
 
 
-function SECMSG_FACTORY_RESET() as Byte
+function SECMSG_FACTORY_RESET(sharedsecret as string) as Byte
     ' returns 1 if successful, else 0
     ' THIS FUNCTION MUST NOT BE CALLED INDIVIDUALLY. IT MUST BE PART OF The
     ' TOTAL FACTORY RESET PROCEDURE!
@@ -30,7 +30,7 @@ function SECMSG_FACTORY_RESET() as Byte
         SECMSG_FACTORY_RESET = 0
         exit function
     end if
-    SECMSG_SHAREDSECRET = "FEDER CARD"
+    SECMSG_SHAREDSECRET = sharedsecret
     SECMSG_REMAINING_ATTEMPTS = SECMSG_FRESH_ATTEMPTS
     SECMSG_FACTORY_RESET = 1
     Disable Key &H01

@@ -17,9 +17,9 @@ const STORAGE_ITEMS=16
 #include HMAC.card.bas
 #include HOTP.card.bas
 #include CRYPTO.card.bas
-#include STORAGE.card.bas
 
 #include SECMSG.card.bas
+#include STORAGE.card.bas
 
 #include ATSHELL.card.bas
 #include FACTORY_RESET.card.bas
