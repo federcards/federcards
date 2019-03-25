@@ -15,6 +15,8 @@ Option Explicit
 
 ' Since no input data is required, LC is set to 0
 Command &H88 &H00 API_CARD_STATUS(LC=0, Data as String)
+    dim ret as byte
+    ret = SetProcessorSpeed(1)
     call CALL_ONE_TIME_INITIALIZATION()
     Data = chr$(SECMSG_STATUS())
 End Command
@@ -36,4 +38,8 @@ Command &H88 &H06 API_AT(Data as string)
         exit command
     end if
     Data = ATCOMMAND(Data)
+End Command
+
+Command &H88 &H88 EXECUTE_FACTORY_RESET(Data as String)
+    call FACTORY_RESET(Data)
 End Command

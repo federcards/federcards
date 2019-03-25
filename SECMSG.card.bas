@@ -15,7 +15,7 @@
 ' failure, or, if successful, &HFF is returned.
 
 
-const SECMSG_FRESH_ATTEMPTS = 5
+const SECMSG_FRESH_ATTEMPTS = 10
 
 
 Eeprom SECMSG_SHAREDSECRET as string*SECMSG_SHAREDSECRET_LENGTH

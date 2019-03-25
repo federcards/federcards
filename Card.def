@@ -7,6 +7,7 @@
 const STORAGE_ITEMS=16
 
 
+#include MISC.DEF
 
 #include AES.DEF
 #include EAX.DEF

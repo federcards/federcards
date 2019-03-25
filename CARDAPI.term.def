@@ -3,3 +3,5 @@ Declare Command &H88 &H02 API_GET_CHALLENGE(LC=0, Data as String)
 Declare Command &H88 &H04 API_SET_ANSWER(Data as String)
 
 Declare Command &H88 &H06 API_AT(Data as string)
+
+Declare Command &H88 &H88 EXECUTE_FACTORY_RESET(Data as String)

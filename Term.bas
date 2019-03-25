@@ -47,6 +47,9 @@ ResetCard : Call CheckSW1SW2()
 
 public buffer as string
 
+buffer = "test"
+call EXECUTE_FACTORY_RESET(buffer) : call CheckSW1SW2()
+
 ' A String variable to hold the response
 private card_status as string*1
 
