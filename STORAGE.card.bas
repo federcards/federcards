@@ -4,6 +4,10 @@
 ' ******************************************************************************
 
 
+' This constant is encrypted with user password as DEATH_KEY storage. If that
+' storage is decrypted and reveals this, then the user has entered the death
+' password. The actual wording does not matter.
+const E2PROM_DEATH_WORD = "kill me if decryption reveals this!"
 
 const E2PROM_STATUS_UNINITIALIZED = &H00
 const E2PROM_STATUS_INITIALIZED = &HF0
@@ -22,9 +26,18 @@ sub E2PROM_SETERROR(e as string)
 end sub
 
 
+' DEATH KEY is constant for a life cycle. Changing it requires a factory reset
+' with loss of all data. The key serves 2 functions: 1) it is the salt during
+' derivation of the actual decryption key for storage. 2) it stores a secret,
+' that is compared with user input. If in any time, whether the user is trying
+' to decrypt the card, or attempt changing the password, this secret is given
+' as input, then the data on card is deleted.
+Eeprom E2PROM_DEATH_KEY_ENCRYPTED as String
+' MAIN KEY is encrypted with user given password. The user gives a password and
+' is used to decrypt the main key.
+Eeprom E2PROM_MAIN_KEY_ENCRYPTED as String
 
 
-Eeprom E2PROM_MAIN_KEY as String
 public E2PROM_MAIN_KEY_DECRYPTED as string
 
 
@@ -39,7 +52,7 @@ Eeprom E2PROM_STORAGE_DATA(STORAGE_ITEMS) as String
 
 function E2PROM_LOCKED() as byte
     if E2PROM_MAIN_KEY_DECRYPTED = "" then
-        if E2PROM_MAIN_KEY = "" then
+        if E2PROM_MAIN_KEY_ENCRYPTED = "" then
             E2PROM_LOCKED = &HFF
         else
             E2PROM_LOCKED = 1
@@ -66,29 +79,56 @@ sub E2PROM_DELETE(id as Integer)
 end sub
 
 
-sub E2PROM_RESET()
+sub E2PROM_FORGET_ALL()
+    ' Mark all entries in E2PROM as deleted. Entries are not deleted with this
+    ' procedure, they can still be recovered if main key is not destroyed!
+    private new_status as string*STORAGE_ITEMS
+    private i as integer
+    for i=1 to STORAGE_ITEMS
+        new_status(i) = chr$(0)
+    next
+    E2PROM_STORAGE_STATUS = new_status
+end sub
+
+
+
+sub E2PROM_RESET(deathpassword as string)
     ' Clear the main key, mark all entry as deleted
     ' - This earses the main key first, which renders all entries undecryptable
     ' - After that, all entries are marked deleted.
     ' - However, unencrypted identifiers of entries are not erased, making it
-    '   possible if an adversary can read out EEPROM.
-    private i as integer
-    private new_status as string*STORAGE_ITEMS
-    call ERASE_ENTRY(E2PROM_MAIN_KEY, 64)
-    E2PROM_MAIN_KEY = ""
-    for i=1 to STORAGE_ITEMS
-        new_status(i) = chr$(0)
-    next
-    E2PROM_STORAGE_STATUS = new_status    
+    '   possible if an adversary can read out EEPROM.    
+    call ERASE_ENTRY(E2PROM_MAIN_KEY_ENCRYPTED, 64)
+    E2PROM_MAIN_KEY_ENCRYPTED = ""
+    E2PROM_DEATH_KEY_ENCRYPTED = crypto_encrypt(Sha256Hash(deathpassword), E2PROM_DEATH_WORD)
+    call E2PROM_FORGET_ALL()
 end sub
 
 
-function E2PROM_DERIVE_KEY_FROM_PASSWORD(password as string) as string
-    ' Derive the key used for encrypting the main key, from user input
-    ' Note this depends on the secure_messaging shared secret. If that's 
-    ' changed, all data is lost! 
-    E2PROM_DERIVE_KEY_FROM_PASSWORD = Sha256Hash(HMAC_SHA1(SECMSG_SHAREDSECRET, password))
-end function
+
+
+sub E2PROM_SUICIDE(doit as byte)
+    ' Suicide function for erasing the data.
+    ' If doit = 0, prepare for suicide but do nothing.
+    static poison1 as string
+    static poison2 as string
+    if doit = 0 then
+        poison1 = crypto_random_bytes(64)
+        poison2 = crypto_random_bytes(64)
+    else
+        E2PROM_MAIN_KEY_ENCRYPTED = poison1
+        E2PROM_MAIN_KEY_DECRYPTED = poison1
+        E2PROM_MAIN_KEY_DECRYPTED = ""
+        
+        E2PROM_DEATH_KEY_ENCRYPTED = poison2
+        E2PROM_MAIN_KEY_ENCRYPTED = ""
+        E2PROM_DEATH_KEY_ENCRYPTED = ""
+        
+        call E2PROM_FORGET_ALL()
+    end if
+end sub
+
+
 
 function E2PROM_DERIVE_SUBKEY(id as byte) as string
     ' Derive the entry encryption key, from main key, in a determinstic way
@@ -108,20 +148,13 @@ end function
 
 
 
-
-
-
-
-
-
-
 function E2PROM_UNLOCK(password as string) as byte
     ' Try to verify password and decrypt main key.
-    ' - Returns 0 if failed, where main key must have been destroyed, or
-    ' - Returns 1 if success.
     
     private derived_password as string
-    private temp_main_key as string
+    private temp_main_key_encrypted as string
+    
+    call E2PROM_SUICIDE(0)
     
     E2PROM_UNLOCK = 0
     
@@ -135,27 +168,32 @@ function E2PROM_UNLOCK(password as string) as byte
         exit function
     end if
     
-    if E2PROM_MAIN_KEY = "" then
+    if E2PROM_MAIN_KEY_ENCRYPTED = "" or E2PROM_DEATH_KEY_ENCRYPTED = "" then
         ' if E2PROM has no main key, it needs to set one password first.
         call E2PROM_SETERROR("E2PROM_UNINITIALIZED")
         exit function
     end if
     
-    temp_main_key = strcpy(E2PROM_MAIN_KEY)
-    E2PROM_MAIN_KEY = crypto_random_bytes(64)
+    ' First, copy main key into memory, and destroy it on permanent storage, to
+    ' avoid power analysis.
+    temp_main_key_encrypted = strcpy(E2PROM_MAIN_KEY_ENCRYPTED)
+    E2PROM_MAIN_KEY_ENCRYPTED = crypto_random_bytes(64)
     
-    derived_password = E2PROM_DERIVE_KEY_FROM_PASSWORD(password)
-    E2PROM_MAIN_KEY_DECRYPTED = crypto_decrypt(derived_password, temp_main_key)
-    
-    if E2PROM_MAIN_KEY_DECRYPTED <> "" then
-        ' Decryption success, write the main key back
-        E2PROM_MAIN_KEY = temp_main_key
-        E2PROM_UNLOCK = 1
-    else
-        ' Destroy E2PROM_MAIN_KEY
-        call E2PROM_RESET()
+    ' Password is hashed with Sha256 to get the correct length.
+    derived_password = Sha256Hash(password)
+    if crypto_decrypt(derived_password, E2PROM_DEATH_KEY_ENCRYPTED) = E2PROM_DEATH_WORD then
+        call E2PROM_SUICIDE(1)
         call E2PROM_SETERROR("E2PROM_UNINITIALIZED")
         E2PROM_UNLOCK = 0
+    else
+        E2PROM_MAIN_KEY_DECRYPTED = crypto_decrypt(derived_password, temp_main_key_encrypted)
+        E2PROM_MAIN_KEY_ENCRYPTED = temp_main_key_encrypted
+        if E2PROM_MAIN_KEY_DECRYPTED <> "" then
+            E2PROM_UNLOCK = 1
+        else
+            call E2PROM_SETERROR("E2PROM_WRONG_PASSWORD")
+            E2PROM_UNLOCK = 0
+        end if
     end if
 end function
 
@@ -174,13 +212,22 @@ function E2PROM_SET_PASSWORD(password as string) as byte
         E2PROM_SET_PASSWORD = 0
         exit function
     end if
+    
+    
+    call E2PROM_SUICIDE(0)
+    
     ' First, get the decrypted main key
     if not E2PROM_LOCKED() then
         ' ... when E2PROM is unlocked, read from RAM
         main_key_decrypted = E2PROM_MAIN_KEY_DECRYPTED
     else
         ' ... or when E2PROM is locked
-        if E2PROM_MAIN_KEY = "" then
+        if E2PROM_DEATH_KEY_ENCRYPTED = "" then
+            call E2PROM_SETERROR("E2PROM_UNINITIALIZED")
+            E2PROM_SET_PASSWORD = 0
+            exit function
+        end if
+        if E2PROM_MAIN_KEY_ENCRYPTED = "" then
             ' only do set password when MAIN_KEY is empty(destroyed) before.
             main_key_decrypted = crypto_random32bytes()
         else
@@ -190,8 +237,19 @@ function E2PROM_SET_PASSWORD(password as string) as byte
         end if
     end if
     
-    new_password_derived = E2PROM_DERIVE_KEY_FROM_PASSWORD(password)
-    E2PROM_MAIN_KEY = crypto_encrypt(new_password_derived, main_key_decrypted)
+    
+    
+    new_password_derived = Sha256Hash(password)
+    if crypto_decrypt(new_password_derived, E2PROM_DEATH_KEY_ENCRYPTED) = E2PROM_DEATH_WORD then
+        call E2PROM_SUICIDE(1)
+        call E2PROM_SETERROR("E2PROM_UNINITIALIZED")
+        E2PROM_SET_PASSWORD = 0
+        exit function
+    end if
+        
+    
+    
+    E2PROM_MAIN_KEY_ENCRYPTED = crypto_encrypt(new_password_derived, main_key_decrypted)
     E2PROM_SET_PASSWORD = 1
 end function
 

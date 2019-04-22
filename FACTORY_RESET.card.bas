@@ -1,6 +1,5 @@
-sub FACTORY_RESET(new_sharedsecret as string)
-    call E2PROM_RESET()
-    call SECMSG_FACTORY_RESET(new_sharedsecret)
+sub FACTORY_RESET(new_deathpassword as string)
+    call E2PROM_RESET(new_deathpassword)
 end sub
 
 ' ******************************************************************************
@@ -8,7 +7,7 @@ end sub
 Eeprom FACTORY_DONE as byte = &HFF
 
 sub ONE_TIME_INITIALIZATION()
-    call FACTORY_RESET("FEDER CARD")
+    call FACTORY_RESET("killme")
 end sub
 
 sub CALL_ONE_TIME_INITIALIZATION()
