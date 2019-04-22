@@ -426,19 +426,21 @@ function E2PROM_GETDATA(index as byte, arg1 as string, arg2 as string) as string
     select case asc(E2PROM_STORAGE_STATUS(index))
     
         case E2PROM_ENTRY_HOTP:
-            private hotp_counter as long
+            private hotp_counter as string
+            private hotp_counter8 as string*8
             private output_length as byte
             private hotp_secret
-            hotp_counter = str2dec(arg1)
-            if hotp_counter < 0 then
+            hotp_counter = hex2str(arg1)
+            if hotp_counter = "" then
                 call E2PROM_SETERROR("HOTP_COUNTER_REQUIRED"): exit function
             end if
+            Right$(hotp_counter8, len(hotp_counter)) = hotp_counter
             
             output_length = str2dec(arg2)
             if output_length > 10 or output_length < 1 then
-                E2PROM_GETDATA = "HOTP," + HOTP(entry_plaintext, hotp_counter, 6)
+                E2PROM_GETDATA = "HOTP," + HOTP(entry_plaintext, hotp_counter8, 6)
             else
-                E2PROM_GETDATA = "HOTP," + HOTP(entry_plaintext, hotp_counter, output_length)
+                E2PROM_GETDATA = "HOTP," + HOTP(entry_plaintext, hotp_counter8, output_length)
             end if
             
         case E2PROM_ENTRY_PASSWORD:

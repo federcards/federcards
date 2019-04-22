@@ -12,26 +12,26 @@
 const HOTP_ALPHABET = "0123456789"
 
 
-function HOTP_INT2STRING(intCounter as Long) as String*8
-    private result as String
-    do while intCounter <> 0
-        result = chr$(intCounter and &HFF) + result
-        intCounter = intCounter Shr 8
-    loop
-    Right$(HOTP_INT2STRING, len(result)) = result
-end function
+'function HOTP_INT2STRING(intCounter as Long) as String*8
+'    private result as String
+'    do while intCounter <> 0
+'        result = chr$(intCounter and &HFF) + result
+'        intCounter = intCounter Shr 8
+'    loop
+'    Right$(HOTP_INT2STRING, len(result)) = result
+'end function
 
 
-function HOTP(strSecret as String, intCounter as Long, intOutputLength as Byte) as String
+function HOTP(strSecret as String, strCounter as String*8, intOutputLength as Byte) as String
     private result as String
-    private strCounter as String 
+    'private strCounter as String 
     private strHash as String
     private longCode as Long
     private offset as Byte
     private a as Long, b as Long, c as Long, d as Long
     private i as Byte
     
-    strCounter = HOTP_INT2STRING(intCounter)
+    'strCounter = HOTP_INT2STRING(intCounter)
     strHash = HMAC_SHA1(strSecret, strCounter)
     
     offset = (asc(strHash(SHA1_OUTPUT_SIZE)) and &H0F) + 1
