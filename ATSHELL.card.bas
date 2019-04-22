@@ -89,6 +89,9 @@ function ATCOMMAND(data as string) as string
 
     call ATCOMMAND_PARSE(data)
     select case ATCOMMAND_NAME
+        case "ATTEMPTS":
+            ATCOMMAND = dec2str(E2PROM_DECRYPTION_ATTEMPTS_MAX - E2PROM_DECRYPTION_FAILURE_COUNTER)
+    
         case "UNLOCK": ' unlock, verify password
             if E2PROM_UNLOCK(ATCOMMAND_ARGS(1)) then
                 ATCOMMAND = "OK"

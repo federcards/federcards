@@ -16,7 +16,7 @@ SourceFile=Term.bas
 Bottom=570
 Left=656
 Right=1308
-ShowCmd=2
+ShowCmd=1
 Top=139
 
 [FreeMem Window]
@@ -27,7 +27,7 @@ Length=46
 Visible=false
 
 [Terminal Program]
-ComPort=100
+ComPort=201
 SaveEEPROM=false
 
 [Window Geometry]
@@ -40,12 +40,12 @@ IOToolTipEnabled=true
 ShowRegisters=Auto
 
 [Window State]
-Block0=&quote;juy(J&amp;&amp;NwRR3wW/;svz\TN&gt;G1,+w#;3Vd7&lt;s2X&apos;^D4&gt;iV#[uHK5~6Ej+:&lt;^_zI0%|4/
+Block0=&quote;juy(J&amp;&amp;NwRR3wW/;svz\TN&gt;G1&amp;:LXHx~N=S|_b_DhO^(T&amp;kl(5W%a&apos;mwUu^G%&quote;&apos;m,5A
 Block1=DQ@J&gt;fF=OZgn/zNwEbn_j=XW[V:e-|pd6pZ,rM#gq&amp;(fLRPoLY}~~4ML/n.7iNKZu1(*GM9
 Block2=l&gt;r(#\}&gt;GWa,7p7L;&quote;=$@B&apos;@]e71-*m/Z}j_v:q~|NPly4m3N=vRWdGc1qA17d`ez%,u
 Block3=.=5&quote;6PM%6;~]mE5k7%$9v^sw|Y:)bY4|?A&apos;r_=M7W`(+_&amp;W7w=;^bViOBIxhY{v,bip|PK
 Block4=&amp;)Zwk!|h34Q\O?5P%JCcR64bXS|%bpZ,Q%BroFvE&amp;U_reqa#}f&quote;$R&gt;&quote;&lt;CrcHw.O&quote;B@yUrC
-Block5=-}v\{N?7z#@O8`kd(5:Vy)!{i1&amp;Lp-L(QI7AX#@6c8Qg|(Ne\p|!r~F4\C}:R.Cj&apos;\HzHr
+Block5=6)hF5Yo`,))_9fR$y?&lt;ZwJjNE[$,\KLz:_y%l#&quote;NN@]2~FDR{RlECNNR^`FCk&apos;\vsdEgU`
 Block6=!
-CRC=0x24324684
+CRC=0xe763d16d
 Length=356

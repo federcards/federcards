@@ -8,6 +8,7 @@
 ' storage is decrypted and reveals this, then the user has entered the death
 ' password. The actual wording does not matter.
 const E2PROM_DEATH_WORD = "kill me if decryption reveals this!"
+const E2PROM_DECRYPTION_ATTEMPTS_MAX = 10
 
 const E2PROM_STATUS_UNINITIALIZED = &H00
 const E2PROM_STATUS_INITIALIZED = &HF0
@@ -38,6 +39,7 @@ Eeprom E2PROM_DEATH_KEY_ENCRYPTED as String
 Eeprom E2PROM_MAIN_KEY_ENCRYPTED as String
 
 
+public E2PROM_DECRYPTION_FAILURE_COUNTER as byte
 public E2PROM_MAIN_KEY_DECRYPTED as string
 
 
@@ -102,6 +104,7 @@ sub E2PROM_RESET(deathpassword as string)
     E2PROM_MAIN_KEY_ENCRYPTED = ""
     E2PROM_DEATH_KEY_ENCRYPTED = crypto_encrypt(Sha256Hash(deathpassword), E2PROM_DEATH_WORD)
     call E2PROM_FORGET_ALL()
+    E2PROM_DECRYPTION_FAILURE_COUNTER = 0
 end sub
 
 
@@ -153,6 +156,7 @@ function E2PROM_UNLOCK(password as string) as byte
     
     private derived_password as string
     private temp_main_key_encrypted as string
+    private old_failure_counter as byte
     
     call E2PROM_SUICIDE(0)
     
@@ -179,22 +183,44 @@ function E2PROM_UNLOCK(password as string) as byte
     temp_main_key_encrypted = strcpy(E2PROM_MAIN_KEY_ENCRYPTED)
     E2PROM_MAIN_KEY_ENCRYPTED = crypto_random_bytes(64)
     
+    ' Similarily, copy failure counter value
+    old_failure_counter = E2PROM_DECRYPTION_FAILURE_COUNTER
+    E2PROM_DECRYPTION_FAILURE_COUNTER = old_failure_counter + 1
+    if old_failure_counter >= E2PROM_DECRYPTION_ATTEMPTS_MAX then
+        goto E2PROM_UNLOCK_SUICIDEROUTE
+    end if
+    
     ' Password is hashed with Sha256 to get the correct length.
     derived_password = Sha256Hash(password)
     if crypto_decrypt(derived_password, E2PROM_DEATH_KEY_ENCRYPTED) = E2PROM_DEATH_WORD then
-        call E2PROM_SUICIDE(1)
-        call E2PROM_SETERROR("E2PROM_UNINITIALIZED")
-        E2PROM_UNLOCK = 0
+        goto E2PROM_UNLOCK_SUICIDEROUTE
     else
         E2PROM_MAIN_KEY_DECRYPTED = crypto_decrypt(derived_password, temp_main_key_encrypted)
         E2PROM_MAIN_KEY_ENCRYPTED = temp_main_key_encrypted
         if E2PROM_MAIN_KEY_DECRYPTED <> "" then
             E2PROM_UNLOCK = 1
+            E2PROM_DECRYPTION_FAILURE_COUNTER = 0
         else
-            call E2PROM_SETERROR("E2PROM_WRONG_PASSWORD")
-            E2PROM_UNLOCK = 0
+            if E2PROM_DECRYPTION_FAILURE_COUNTER >= E2PROM_DECRYPTION_ATTEMPTS_MAX then
+                goto E2PROM_UNLOCK_SUICIDEROUTE
+            else
+                call E2PROM_SETERROR("E2PROM_WRONG_PASSWORD")
+                E2PROM_UNLOCK = 0
+            end if
         end if
     end if
+    
+    exit function
+    
+    
+    
+    E2PROM_UNLOCK_SUICIDEROUTE:
+    temp_main_key_encrypted = ""
+    call E2PROM_SUICIDE(1)
+    call E2PROM_SETERROR("E2PROM_UNINITIALIZED")
+    E2PROM_UNLOCK = 0
+    exit function
+    
 end function
 
 
@@ -241,16 +267,21 @@ function E2PROM_SET_PASSWORD(password as string) as byte
     
     new_password_derived = Sha256Hash(password)
     if crypto_decrypt(new_password_derived, E2PROM_DEATH_KEY_ENCRYPTED) = E2PROM_DEATH_WORD then
-        call E2PROM_SUICIDE(1)
-        call E2PROM_SETERROR("E2PROM_UNINITIALIZED")
-        E2PROM_SET_PASSWORD = 0
-        exit function
+        goto E2PROM_SET_PASSWORD_SUICIDEROUTE
     end if
-        
-    
     
     E2PROM_MAIN_KEY_ENCRYPTED = crypto_encrypt(new_password_derived, main_key_decrypted)
     E2PROM_SET_PASSWORD = 1
+    
+    exit function
+    
+    E2PROM_SET_PASSWORD_SUICIDEROUTE:
+    main_key_decrypted = ""
+    call E2PROM_SUICIDE(1)
+    call E2PROM_SETERROR("E2PROM_UNINITIALIZED")
+    E2PROM_SET_PASSWORD = 0
+    exit function
+    
 end function
 
 
