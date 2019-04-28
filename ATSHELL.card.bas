@@ -90,7 +90,7 @@ function ATCOMMAND(data as string) as string
     call ATCOMMAND_PARSE(data)
     select case ATCOMMAND_NAME
         case "ATTEMPTS":
-            ATCOMMAND = dec2str(E2PROM_DECRYPTION_ATTEMPTS_MAX - E2PROM_DECRYPTION_FAILURE_COUNTER)
+            ATCOMMAND = "+ATTEMPTS:" + dec2str(E2PROM_DECRYPTION_ATTEMPTS_MAX - E2PROM_DECRYPTION_FAILURE_COUNTER)
     
         case "UNLOCK": ' unlock, verify password
             if E2PROM_UNLOCK(ATCOMMAND_ARGS(1)) then
@@ -108,6 +108,7 @@ function ATCOMMAND(data as string) as string
                 case else:
                     ATCOMMAND = "LOCKED"
             end select
+            ATCOMMAND = "+STATUS:" + ATCOMMAND
             
         case "LOCK": ' lock
             call E2PROM_LOCK()
@@ -168,6 +169,18 @@ function ATCOMMAND(data as string) as string
             else
                 ATCOMMAND = "+ADDHOTPENTRY:" + dec2str(newid)
             end if
+            
+        case "TESTHOTP":
+            private hotp_counter as string
+            private hotp_counter8 as string*8
+            private hotp_secret as string
+            hotp_secret = hex2str(ATCOMMAND_ARGS(1))
+            hotp_counter = hex2str(ATCOMMAND_ARGS(2))
+            if hotp_counter = "" or hotp_secret = "" then
+                ATCOMMAND = "INVALID_PARAMETER": exit function
+            end if
+            Right$(hotp_counter8, len(hotp_counter)) = hotp_counter
+            ATCOMMAND = "+TESTHOTP:" + HOTP(hotp_secret, hotp_counter8, 8)
             
         case else:
             ATCOMMAND = "INVALID_COMMAND"

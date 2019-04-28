@@ -20,21 +20,19 @@ Length=46
 Visible=false
 
 [EEPROM]
-Block0=B^!ZmBg]:f29pLT$OjxvAg&apos;i&apos;zPrG(U-@k\PG&quote;et2grcY7[P_Q&lt;(k|z|A(:^G[j.5=]&gt;qES
-Block1=&apos;}J/&gt;OM8Oj3jR&quote;]`|Zwzivb)@`7eDqV0xZU7IL7if](%xJLA}&apos;Sh9Bba1wO@pb0(}S,V*qp
-Block2=7[1LF`B08Qh8aiXjbel0xG6!Il\4`)}4M4_&quote;#)pSrSn6xz:7oBc%@F5u?J=k,@gH`R&apos;+3.N
-Block3=AgslYji&quote;Iz(zt6%xraq7BJx=|&quote;xBl}pZiUzZ%t_EQcaSQVHo:s9fG*(*kSg}W]cpOLB@%pA
-Block4=%m]XKB[.B~L4$QN_(Lm.aUC&lt;%395rlY_bePZ|eFsoCX{,Z4Rl*{{,5T;dc(`\]=.b|(Hbxv
-Block5=9%u%ga,0LMM6}k&lt;A*[&gt;&amp;-rhW^xU)BsvdVPc?^Kh(-o54&lt;upS#cS4#}!_#R@nF&lt;f#,YY|G&quote;C
-Block6=+vVj3tCZ9
-CRC=0x4017e4cf
-Length=364
-MaskCRC=3822043497
-StartCRC=1486692889
+Block0=B^!ZWgq]]25sz;.&gt;#|;_sxqRC.K5~$|x$?cd,&gt;)Uuj(k.c,JZQv~VNfAT?]&lt;FsaI_^-%([f
+Block1=&apos;t!j/n?Zb2]xL0,*N8\!+I*{sZ3JP&quote;O~eXhS]a&gt;)^~VPCyn[*|E@{Re+5YX[?=v}~4d=,Lf
+Block2=+`5u%\YpL|2s^GrS_:y7A7ctk]cntDzijvpk&quote;uuPIY_R&lt;Hi-kpLzyqCI=q&lt;G8c%0SBAjj2k
+Block3=(T6Q%eZW7*R&amp;Szxxz%=nD)wDIbO48_ju-?p$&amp;|,Nt(n$C3d2L0;*iBI68eHLlvJ35X:sq8O
+Block4=)sKkw:#nZ
+CRC=0x3f2d20b6
+Length=274
+MaskCRC=4289215055
+StartCRC=2430232415
 
 [Files Window]
-Block0=&quote;=my,fAB7L,_jjgu_+=LR*|$p&gt;|U=`f4b70-&amp;NiR&gt;J^FjidO+(SE4o}y
-CRC=0x670c7146
+Block0=&quote;=my,fAB7L,_jjgu_+=LR*|&quote;L9:PS4]U6Og+$)Bp2G97rgrVDtb#jo:C
+CRC=0x7ca99f0b
 Length=46
 Visible=false
 
