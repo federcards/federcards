@@ -170,6 +170,13 @@ function ATCOMMAND(data as string) as string
                 ATCOMMAND = "+ADDHOTPENTRY:" + dec2str(newid)
             end if
             
+        case "DELENTRY":
+            if E2PROM_DELETE_ENTRY(str2dec(ATCOMMAND_ARGS(1))) then
+                ATCOMMAND = "OK"
+            else
+                ATCOMMAND = E2PROM_ERROR_TEXT
+            end if
+            
         case "TESTHOTP":
             private hotp_counter as string
             private hotp_counter8 as string*8

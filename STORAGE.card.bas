@@ -73,14 +73,6 @@ sub ERASE_ENTRY(byref dest as String, length as Integer)
 end sub 
 
 
-sub E2PROM_DELETE(id as Integer)
-    if id > STORAGE_ITEMS or id < 1 then
-        exit sub
-    end if
-    call ERASE_ENTRY(E2PROM_STORAGE_DATA(id), CRYPTO_OVERHEAD)
-end sub
-
-
 sub E2PROM_FORGET_ALL()
     ' Mark all entries in E2PROM as deleted. Entries are not deleted with this
     ' procedure, they can still be recovered if main key is not destroyed!
@@ -328,6 +320,24 @@ function E2PROM_ADD_ENTRY(entry_type as byte) as byte
         exit function
     end if
     E2PROM_STORAGE_STATUS(E2PROM_ADD_ENTRY) = chr$(entry_type)
+end function
+
+
+' Delete an entry
+function E2PROM_DELETE_ENTRY(index as byte) as byte
+    E2PROM_DELETE_ENTRY = 0
+    if E2PROM_LOCKED() then
+        call E2PROM_SETERROR("UNLOCK_REQUIRED") : exit function
+    end if
+    if index > STORAGE_ITEMS or index < 1 then
+        call E2PROM_SETERROR("INVALID_INDEX") : exit function
+    end if
+    if asc(E2PROM_STORAGE_STATUS(index)) <> E2PROM_ENTRY_EMPTY then
+        call ERASE_ENTRY(E2PROM_STORAGE_DATA(index), CRYPTO_OVERHEAD)
+        E2PROM_STORAGE_IDENTIFIER(index) = ""
+        E2PROM_STORAGE_STATUS(index) = chr$(E2PROM_ENTRY_EMPTY)
+    end if
+    E2PROM_DELETE_ENTRY = 1
 end function
 
 

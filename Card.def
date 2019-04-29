@@ -7,7 +7,7 @@
 
 
 
-const STORAGE_ITEMS=16
+const STORAGE_ITEMS=120
 
 
 #include MISC.DEF

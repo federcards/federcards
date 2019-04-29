@@ -52,7 +52,7 @@ buffer = "AT+STATUS"
 call API_AT(buffer) : call CheckSW1SW2()
 print "Card status: ", buffer
 
-if buffer = "UNINITIALIZED" then
+if buffer = "+STATUS:UNINITIALIZED" then
     print("Reset card.")
     call EXECUTE_FACTORY_RESET("killme") : call CheckSW1SW2()
     
@@ -65,7 +65,7 @@ call API_AT(buffer) : call CheckSW1SW2()
 
 buffer = "AT+STATUS"
 call API_AT(buffer) : call CheckSW1SW2()
-if buffer = "UNLOCKED" then
+if buffer = "+STATUS:UNLOCKED" then
     print "CARD UNLOCKED >>"
     print ""
 else
