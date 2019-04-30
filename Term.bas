@@ -43,6 +43,7 @@ ResetCard : Call CheckSW1SW2()
 
 
 public buffer as string
+private default_password as string = "7004b87c57cc598f518e839b3b4000aa949c531b4ebf45da1688994a2676c535"
 
 print "Start."
 
@@ -56,11 +57,11 @@ if buffer = "+STATUS:UNINITIALIZED" then
     print("Reset card.")
     call EXECUTE_FACTORY_RESET("killme") : call CheckSW1SW2()
     
-    buffer = "AT+SETPWD=TEST"
+    buffer = "AT+SETPWD=" + default_password
     call API_AT(buffer) : call CheckSW1SW2()
 end if
 
-buffer = "AT+UNLOCK=TEST"
+buffer = "AT+UNLOCK=" + default_password
 call API_AT(buffer) : call CheckSW1SW2()
 
 buffer = "AT+STATUS"

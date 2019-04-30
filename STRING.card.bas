@@ -19,6 +19,8 @@ function str2dec(strInput as string) as long
     ' returns -1 if not decodable!
     private i as integer
     private c as byte
+    private j as long
+    j = 1
     for i=len(strInput) to 1 step -1
         c = asc(strInput(i))
         if c < 48 or c > 57 then
@@ -26,7 +28,8 @@ function str2dec(strInput as string) as long
             exit function
         end if
         c = c - 48
-        str2dec = str2dec * 10 + c
+        str2dec = str2dec + c * j
+        j = j * 10
     next       
 end function
 

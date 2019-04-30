@@ -297,6 +297,8 @@ function E2PROM_ADD_ENTRY(entry_type as byte) as byte
     ' Find an empty slot and set its type to entry_type.
     ' On error, return 0. Otherwise the index of this new entry is returned.
     private found as byte = 0
+    private searched as byte = 0
+    private offset as byte
     E2PROM_ADD_ENTRY = 0
     
     if E2PROM_LOCKED() then
@@ -308,10 +310,18 @@ function E2PROM_ADD_ENTRY(entry_type as byte) as byte
         exit function
     end if
     
-    for E2PROM_ADD_ENTRY = 1 to STORAGE_ITEMS
-        if asc(E2PROM_STORAGE_STATUS(E2PROM_ADD_ENTRY)) = 0 then
+    ' Search start is randomized, for balancing usage
+    offset = (Rnd and &HFF) mod STORAGE_ITEMS
+    E2PROM_ADD_ENTRY = offset + 1 
+    for searched = 1 to STORAGE_ITEMS ' at most so many searches
+        if asc(E2PROM_STORAGE_STATUS(E2PROM_ADD_ENTRY)) = E2PROM_ENTRY_EMPTY then
             found = 1
             exit for
+        end if
+        if E2PROM_ADD_ENTRY >= STORAGE_ITEMS then
+            E2PROM_ADD_ENTRY = 1
+        else
+            E2PROM_ADD_ENTRY = E2PROM_ADD_ENTRY + 1
         end if
     next
     if not found then
